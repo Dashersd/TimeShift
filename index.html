@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading - Timeshift</title>
+    <link rel="stylesheet" href="loading.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 3D Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <!-- Expanding Glow Rings -->
+            <div class="glow-ring glow-ring-1"></div>
+            <div class="glow-ring glow-ring-2"></div>
+            <div class="glow-ring glow-ring-3"></div>
+            
+            <!-- 3D Watch Container -->
+            <div class="watch-3d-container">
+                <div class="watch-3d">
+                    <!-- Watch Face -->
+                    <div class="watch-face-3d">
+                        <!-- Hour Markers -->
+                        <div class="hour-marker" style="--i: 0"></div>
+                        <div class="hour-marker" style="--i: 1"></div>
+                        <div class="hour-marker" style="--i: 2"></div>
+                        <div class="hour-marker" style="--i: 3"></div>
+                        <div class="hour-marker" style="--i: 4"></div>
+                        <div class="hour-marker" style="--i: 5"></div>
+                        <div class="hour-marker" style="--i: 6"></div>
+                        <div class="hour-marker" style="--i: 7"></div>
+                        <div class="hour-marker" style="--i: 8"></div>
+                        <div class="hour-marker" style="--i: 9"></div>
+                        <div class="hour-marker" style="--i: 10"></div>
+                        <div class="hour-marker" style="--i: 11"></div>
+                        
+                        <!-- Watch Hands -->
+                        <div class="watch-hand hour-hand"></div>
+                        <div class="watch-hand minute-hand"></div>
+                        <div class="watch-hand second-hand"></div>
+                        
+                        <!-- Center Dot -->
+                        <div class="watch-center"></div>
+                    </div>
+                </div>
+                
+                <!-- Floating Particles -->
+                <div class="particle" style="--i: 0; --delay: 0s"></div>
+                <div class="particle" style="--i: 1; --delay: 0.2s"></div>
+                <div class="particle" style="--i: 2; --delay: 0.4s"></div>
+                <div class="particle" style="--i: 3; --delay: 0.6s"></div>
+                <div class="particle" style="--i: 4; --delay: 0.8s"></div>
+                <div class="particle" style="--i: 5; --delay: 1s"></div>
+            </div>
+            
+            <!-- Brand Text -->
+            <h1 class="loading-brand">TIMESHIFT</h1>
+            <p class="loading-tagline">Loading Excellence</p>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple redirect to watch.html (which now has the loading screen built-in)
+        window.location.href = 'watch.html';
+    </script>
+</body>
+</html>

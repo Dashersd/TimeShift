@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeshift - Premium Watches</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="loading.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Override loading.css body overflow when main content is visible */
+        body {
+            overflow: auto !important;
+        }
+        
+        /* Hide main content initially */
+        .main-content {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, visibility 0.8s ease, transform 0.8s ease;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+        
+        .main-content.visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        
+        /* Ensure loading screen is completely removed when hidden */
+        .loading-screen[style*="display: none"] {
+            z-index: -1 !important;
+            pointer-events: none !important;
+        }
+        
+        /* When loading screen is active, hide overflow */
+        body:has(.loading-screen:not([style*="display: none"])) {
+            overflow: hidden !important;
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- 3D Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <!-- Expanding Glow Rings -->
+            <div class="glow-ring glow-ring-1"></div>
+            <div class="glow-ring glow-ring-2"></div>
+            <div class="glow-ring glow-ring-3"></div>
+            
+            <!-- 3D Watch Container -->
+            <div class="watch-3d-container">
+                <div class="watch-3d">
+                    <!-- Watch Face -->
+                    <div class="watch-face-3d">
+                        <!-- Hour Markers -->
+                        <div class="hour-marker" style="--i: 0"></div>
+                        <div class="hour-marker" style="--i: 1"></div>
+                        <div class="hour-marker" style="--i: 2"></div>
+                        <div class="hour-marker" style="--i: 3"></div>
+                        <div class="hour-marker" style="--i: 4"></div>
+                        <div class="hour-marker" style="--i: 5"></div>
+                        <div class="hour-marker" style="--i: 6"></div>
+                        <div class="hour-marker" style="--i: 7"></div>
+                        <div class="hour-marker" style="--i: 8"></div>
+                        <div class="hour-marker" style="--i: 9"></div>
+                        <div class="hour-marker" style="--i: 10"></div>
+                        <div class="hour-marker" style="--i: 11"></div>
+                        
+                        <!-- Watch Hands -->
+                        <div class="watch-hand hour-hand"></div>
+                        <div class="watch-hand minute-hand"></div>
+                        <div class="watch-hand second-hand"></div>
+                        
+                        <!-- Center Dot -->
+                        <div class="watch-center"></div>
+                    </div>
+                </div>
+                
+                <!-- Floating Particles -->
+                <div class="particle" style="--i: 0; --delay: 0s"></div>
+                <div class="particle" style="--i: 1; --delay: 0.2s"></div>
+                <div class="particle" style="--i: 2; --delay: 0.4s"></div>
+                <div class="particle" style="--i: 3; --delay: 0.6s"></div>
+                <div class="particle" style="--i: 4; --delay: 0.8s"></div>
+                <div class="particle" style="--i: 5; --delay: 1s"></div>
+            </div>
+            
+            <!-- Brand Text -->
+            <h1 class="loading-brand">TIMESHIFT</h1>
+            <p class="loading-tagline">Loading Excellence</p>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (hidden initially) -->
+    <div class="main-content" id="mainContent">
+        <!-- Navbar -->
+        <nav class="navbar" id="navbar">
+            <div class="navbar-content">
+                <div class="navbar-brand">
+                    <a href="#home">Timeshift</a>
+                </div>
+                <ul class="navbar-menu">
+                    <li><a href="#collections">Collections</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#testimonials">Reviews</a></li>
+                    <li><a href="#support">Support</a></li>
+                </ul>
+                <div class="navbar-cart">
+                    <button class="cart-btn" id="cartBtn" aria-label="Shopping cart">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="cart-counter" id="cartCounter">0</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-eyebrow">Luxury Timepieces Since 1973</div>
+                    <h1 class="hero-brand">Time Crafted to Perfection</h1>
+                    <p class="hero-description">
+                        Experience the pinnacle of horological excellence. Each Timeshift watch is a masterpiece of precision engineering and timeless design.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#collections" class="btn btn-primary">
+                            Explore Collection
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                        <a href="#about" class="btn btn-secondary">Learn More</a>
+                    </div>
+                    
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Years Heritage</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">15K+</div>
+                            <div class="stat-label">Happy Customers</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Swiss Made</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collections Section -->
+        <section class="collections" id="collections">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Featured Collections</h2>
+                    <p class="section-subtitle">Discover our curated selection of premium timepieces</p>
+                </div>
+                <div class="collections-carousel-wrapper">
+                    <button class="carousel-nav-btn carousel-prev" aria-label="Previous collection">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <div class="collections-carousel">
+                        <div class="carousel-track" id="carouselTrack">
+                            <div class="collection-card reveal active">
+                                <div class="trophy-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2M6 5h12M7 19h10M12 9v10M8 13l-4 4 4 4M16 13l4 4-4 4"/>
+                                        <path d="M8 21l4-7 4 7"/>
+                                    </svg>
+                                </div>
+                                <div class="collection-image">
+                                    <img src="Image/perpetual_calender.png" alt="Classic Series Watch">
+                                </div>
+                                <div class="collection-content">
+                                    <h3>Classic Series</h3>
+                                    <p>Timeless elegance for the modern gentleman</p>
+                                    <div class="collection-interactive">
+                                        <p class="collection-price">$1,899</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collection-card reveal">
+                                <div class="trophy-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2M6 5h12M7 19h10M12 9v10M8 13l-4 4 4 4M16 13l4 4-4 4"/>
+                                        <path d="M8 21l4-7 4 7"/>
+                                    </svg>
+                                </div>
+                                <div class="collection-image">
+                                    <img src="Image/perpetual_calender2.png" alt="Sport Collection Watch">
+                                </div>
+                                <div class="collection-content">
+                                    <h3>Sport Collection</h3>
+                                    <p>Performance meets style in every design</p>
+                                    <div class="collection-interactive">
+                                        <p class="collection-price">$2,199</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collection-card reveal">
+                                <div class="trophy-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2M6 5h12M7 19h10M12 9v10M8 13l-4 4 4 4M16 13l4 4-4 4"/>
+                                        <path d="M8 21l4-7 4 7"/>
+                                    </svg>
+                                </div>
+                                <div class="collection-image">
+                                    <img src="Image/Perpetual_calender_3.png" alt="Heritage Line Watch">
+                                </div>
+                                <div class="collection-content">
+                                    <h3>Heritage Line</h3>
+                                    <p>Celebrating decades of watchmaking excellence</p>
+                                    <div class="collection-interactive">
+                                        <p class="collection-price">$3,299</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-nav-btn carousel-next" aria-label="Next collection">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Sellers -->
+        <section class="best-sellers" id="about">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Best Sellers</h2>
+                    <p class="section-subtitle">Our most popular timepieces</p>
+                </div>
+                <div class="collections-carousel-wrapper">
+                    <button class="carousel-nav-btn carousel-prev" aria-label="Previous product">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <div class="collections-carousel">
+                        <div class="carousel-track" id="productsCarouselTrack">
+                            <div class="product-card reveal">
+                                <div class="trophy-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2M6 5h12M7 19h10M12 9v10M8 13l-4 4 4 4M16 13l4 4-4 4"/>
+                                        <path d="M8 21l4-7 4 7"/>
+                                    </svg>
+                                </div>
+                                <div class="product-image">
+                                    <div class="product-badge">Bestseller</div>
+                                    <img src="Image/perpetual 13.png" alt="Chronograph Pro">
+                                    <button class="product-cart-btn" onclick="addToCart('Chronograph Pro', '$2,499')" aria-label="Add to cart">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="9" cy="21" r="1"></circle>
+                                            <circle cx="20" cy="21" r="1"></circle>
+                                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="product-content" onclick="openQuickView('Chronograph Pro', '$2,499', 1)">
+                                    <h3>Chronograph Pro</h3>
+                                    <p class="product-price">$2,499</p>
+                                </div>
+                            </div>
+
+                            <div class="product-card reveal active">
+                                <div class="trophy-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2M6 5h12M7 19h10M12 9v10M8 13l-4 4 4 4M16 13l4 4-4 4"/>
+                                        <path d="M8 21l4-7 4 7"/>
+                                    </svg>
+                                </div>
+                                <div class="product-image">
+                                    <img src="Image/perpetual 12.png" alt="Elegance Classic">
+                                    <button class="product-cart-btn" onclick="addToCart('Elegance Classic', '$1,899')" aria-label="Add to cart">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="9" cy="21" r="1"></circle>
+                                            <circle cx="20" cy="21" r="1"></circle>
+                                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="product-content" onclick="openQuickView('Elegance Classic', '$1,899', 2)">
+                                    <h3>Elegance Classic</h3>
+                                    <p class="product-price">$1,899</p>
+                                </div>
+                            </div>
+
+                            <div class="product-card reveal">
+                                <div class="trophy-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2M6 5h12M7 19h10M12 9v10M8 13l-4 4 4 4M16 13l4 4-4 4"/>
+                                        <path d="M8 21l4-7 4 7"/>
+                                    </svg>
+                                </div>
+                                <div class="product-image">
+                                    <img src="Image/perpetual_calender_6.png" alt="Heritage Master">
+                                    <button class="product-cart-btn" onclick="addToCart('Heritage Master', '$3,299')" aria-label="Add to cart">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="9" cy="21" r="1"></circle>
+                                            <circle cx="20" cy="21" r="1"></circle>
+                                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="product-content" onclick="openQuickView('Heritage Master', '$3,299', 4)">
+                                    <h3>Heritage Master</h3>
+                                    <p class="product-price">$3,299</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-nav-btn carousel-next" aria-label="Next product">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter">
+            <div class="container">
+                <div class="newsletter-content">
+                    <div class="newsletter-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <h2 class="newsletter-title">Stay in the Loop</h2>
+                    <p class="newsletter-subtitle">Subscribe to our newsletter for exclusive offers and updates</p>
+                    
+                    <div class="newsletter-benefits">
+                        <div class="newsletter-benefit">
+                            <div class="benefit-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <div class="benefit-text">
+                                <h4>Exclusive Deals</h4>
+                                <p>Get access to special promotions</p>
+                            </div>
+                        </div>
+                        <div class="newsletter-benefit">
+                            <div class="benefit-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                            </div>
+                            <div class="benefit-text">
+                                <h4>New Arrivals</h4>
+                                <p>Be the first to know about new products</p>
+                            </div>
+                        </div>
+                        <div class="newsletter-benefit">
+                            <div class="benefit-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                            </div>
+                            <div class="benefit-text">
+                                <h4>Expert Tips</h4>
+                                <p>Receive watch care and styling advice</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="newsletter-form" id="newsletterForm">
+                        <div class="newsletter-input-group">
+                            <input type="email" placeholder="Enter your email address" required>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </div>
+                        <div class="newsletter-checkbox">
+                            <input type="checkbox" id="newsletterConsent" required>
+                            <label for="newsletterConsent">I agree to receive marketing communications</label>
+                        </div>
+                    </form>
+                    <div class="newsletter-success" id="newsletterSuccess">
+                        Thank you for subscribing! Check your email for confirmation.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials" id="testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">What Our Customers Say</h2>
+                    <p class="section-subtitle">Real reviews from watch enthusiasts</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card reveal">
+                        <div class="testimonial-rating">★★★★★</div>
+                        <p class="testimonial-text">
+                            "The craftsmanship is exceptional. My Timeshift watch has been my daily companion for over a year, and it still looks and functions perfectly."
+                        </p>
+                        <div class="testimonial-author">Michael Chen</div>
+                    </div>
+                    <div class="testimonial-card reveal">
+                        <div class="testimonial-rating">★★★★★</div>
+                        <p class="testimonial-text">
+                            "Absolutely stunning design and quality. Worth every penny. The attention to detail is remarkable."
+                        </p>
+                        <div class="testimonial-author">Sarah Johnson</div>
+                    </div>
+                    <div class="testimonial-card reveal">
+                        <div class="testimonial-rating">★★★★★</div>
+                        <p class="testimonial-text">
+                            "Best watch purchase I've ever made. The customer service is top-notch, and the product exceeded my expectations."
+                        </p>
+                        <div class="testimonial-author">David Martinez</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer" id="support">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Timeshift</h3>
+                        <p class="footer-description">
+                            Crafting timeless timepieces since 1973. Each watch is a testament to Swiss precision and elegant design.
+                        </p>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="#collections">Collections</a></li>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#testimonials">Reviews</a></li>
+                            <li><a href="#support">Support</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Customer Service</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">Shipping Info</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Warranty</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Connect</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">Instagram</a></li>
+                            <li><a href="#">Facebook</a></li>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">LinkedIn</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Timeshift. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Quick View Modal -->
+        <div class="modal" id="quickViewModal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
+                <div class="modal-body">
+                    <div class="modal-gallery">
+                        <div class="modal-main-image">
+                            <svg width="400" height="400" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="70" fill="#1a1a1a" stroke="#D4AF37" stroke-width="2"/>
+                                <line x1="100" y1="100" x2="100" y2="50" stroke="#D4AF37" stroke-width="3"/>
+                                <line x1="100" y1="100" x2="130" y2="100" stroke="#fff" stroke-width="2"/>
+                                <circle cx="100" cy="100" r="5" fill="#D4AF37"/>
+                            </svg>
+                        </div>
+                        <div class="modal-thumbnails">
+                            <div class="modal-thumbnail active">
+                                <svg width="100" height="100" viewBox="0 0 200 200">
+                                    <circle cx="100" cy="100" r="70" fill="#1a1a1a" stroke="#D4AF37" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="modal-thumbnail">
+                                <svg width="100" height="100" viewBox="0 0 200 200">
+                                    <circle cx="100" cy="100" r="70" fill="#2a2a2a" stroke="#D4AF37" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="modal-thumbnail">
+                                <svg width="100" height="100" viewBox="0 0 200 200">
+                                    <circle cx="100" cy="100" r="70" fill="#0a0a0a" stroke="#D4AF37" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="modal-thumbnail">
+                                <svg width="100" height="100" viewBox="0 0 200 200">
+                                    <circle cx="100" cy="100" r="70" fill="#1a1a1a" stroke="#C0C0C0" stroke-width="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-info">
+                        <h2 class="modal-title" id="modalTitle">Chronograph Pro</h2>
+                        <p class="modal-price" id="modalPrice">$2,499</p>
+                        <div class="modal-rating">
+                            <span class="modal-stars">★★★★★</span>
+                            <span class="modal-reviews">(127 reviews)</span>
+                        </div>
+                        <p class="modal-description">
+                            Experience precision engineering with our flagship chronograph. Featuring a Swiss-made movement, sapphire crystal, and premium leather strap. Water-resistant up to 100 meters.
+                        </p>
+                        <div class="modal-features">
+                            <h4>Key Features</h4>
+                            <ul>
+                                <li>Swiss Automatic Movement</li>
+                                <li>Sapphire Crystal Glass</li>
+                                <li>100m Water Resistance</li>
+                                <li>Premium Leather Strap</li>
+                                <li>2-Year Warranty</li>
+                            </ul>
+                        </div>
+                        <div class="modal-options">
+                            <div class="modal-option-group">
+                                <label class="modal-option-label">Size</label>
+                                <div class="modal-sizes">
+                                    <button class="size-btn active">40mm</button>
+                                    <button class="size-btn">42mm</button>
+                                    <button class="size-btn">44mm</button>
+                                </div>
+                                <a href="#" class="size-guide-link" onclick="openSizeGuide(event)">
+                                    Size Guide
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <div class="quantity-selector">
+                                <button class="quantity-btn" onclick="decrementQuantity()">−</button>
+                                <span class="quantity-value" id="quantityValue">1</span>
+                                <button class="quantity-btn" onclick="incrementQuantity()">+</button>
+                            </div>
+                            <button class="btn-add-to-cart" onclick="addToCartFromModal()">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Size Guide Modal -->
+        <div class="modal" id="sizeGuideModal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeSizeGuide()" aria-label="Close size guide">×</button>
+                <div class="size-guide-content">
+                    <h2 class="size-guide-title">Size Guide</h2>
+                    <table class="size-guide-table">
+                        <thead>
+                            <tr>
+                                <th>Size</th>
+                                <th>Case Diameter</th>
+                                <th>Band Width</th>
+                                <th>Thickness</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>40mm</td>
+                                <td>40mm</td>
+                                <td>20mm</td>
+                                <td>11mm</td>
+                            </tr>
+                            <tr>
+                                <td>42mm</td>
+                                <td>42mm</td>
+                                <td>22mm</td>
+                                <td>12mm</td>
+                            </tr>
+                            <tr>
+                                <td>44mm</td>
+                                <td>44mm</td>
+                                <td>24mm</td>
+                                <td>13mm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="size-guide-tips">
+                        <h4>Choosing the Right Size</h4>
+                        <ul>
+                            <li>Measure your wrist circumference to find the perfect fit</li>
+                            <li>40mm is ideal for wrists 6-7 inches</li>
+                            <li>42mm works well for wrists 7-8 inches</li>
+                            <li>44mm is best for wrists 8+ inches</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Loading screen script - combined version
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressFill = document.getElementById('progressFill');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (!progressFill || !progressPercentage || !loadingScreen || !mainContent) {
+                // If elements don't exist, show main content immediately
+                if (mainContent) {
+                    mainContent.classList.add('visible');
+                }
+                if (loadingScreen) {
+                    loadingScreen.style.display = 'none';
+                }
+                return;
+            }
+            
+            let progress = 0;
+            const duration = 3000; // 3 seconds
+            const interval = 20; // Update every 20ms
+            const increment = 100 / (duration / interval);
+            
+            const progressInterval = setInterval(() => {
+                progress += increment;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    
+                    progressFill.style.width = '100%';
+                    progressPercentage.textContent = '100%';
+                    
+                    // Fade out loading screen and show main content
+                    setTimeout(() => {
+                        loadingScreen.classList.add('fade-out');
+                        
+                        setTimeout(() => {
+                            // Hide loading screen completely
+                            loadingScreen.style.display = 'none';
+                            loadingScreen.style.zIndex = '-1';
+                            loadingScreen.style.pointerEvents = 'none';
+                            
+                            // Enable body scrolling
+                            document.body.style.overflow = 'auto';
+                            
+                            // Show main content
+                            mainContent.classList.add('visible');
+                            mainContent.style.pointerEvents = 'auto';
+                            
+                            // Ensure main content is accessible and scrollable
+                            console.log('Main content should now be visible and functional');
+                        }, 500);
+                    }, 500);
+                } else {
+                    progressFill.style.width = progress + '%';
+                    progressPercentage.textContent = Math.round(progress) + '%';
+                }
+            }, interval);
+        });
+        
+        // Collections Carousel Functionality
+        function initCollectionsCarousel() {
+            const carouselTrack = document.getElementById('carouselTrack');
+            const cards = document.querySelectorAll('#collections .collection-card');
+            const prevBtn = document.querySelector('.carousel-prev');
+            const nextBtn = document.querySelector('.carousel-next');
+            
+            if (!carouselTrack || !cards.length) return;
+            
+            // Start with middle card (index 1 for 3 cards)
+            let currentIndex = Math.floor(cards.length / 2);
+            const totalCards = cards.length;
+            
+            // Function to update carousel
+            function updateCarousel() {
+                cards.forEach((card, index) => {
+                    card.classList.remove('active');
+                    if (index === currentIndex) {
+                        card.classList.add('active');
+                    }
+                });
+                
+                // Calculate transform to center the active card
+                if (cards.length > 0 && carouselTrack.offsetWidth > 0) {
+                    const cardWidth = cards[0].offsetWidth;
+                    const gap = 32; // 2rem gap
+                    const trackWidth = carouselTrack.offsetWidth;
+                    const totalWidth = (cardWidth * totalCards) + (gap * (totalCards - 1));
+                    const offset = (trackWidth / 2) - (cardWidth / 2) - (currentIndex * (cardWidth + gap));
+                    carouselTrack.style.transform = `translateX(${offset}px)`;
+                }
+            }
+            
+            // Navigation functions
+            function goToNext() {
+                currentIndex = (currentIndex + 1) % totalCards;
+                updateCarousel();
+            }
+            
+            function goToPrev() {
+                currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+                updateCarousel();
+            }
+            
+            // Event listeners
+            if (nextBtn) {
+                nextBtn.addEventListener('click', goToNext);
+            }
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', goToPrev);
+            }
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                const collectionsSection = document.querySelector('#collections');
+                if (!collectionsSection) return;
+                
+                const rect = collectionsSection.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                
+                if (isVisible) {
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        goToNext();
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        goToPrev();
+                    }
+                }
+            });
+            
+            // Touch/swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            carouselTrack.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            carouselTrack.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        goToNext();
+                    } else {
+                        goToPrev();
+                    }
+                }
+            }
+            
+            // Initialize
+            updateCarousel();
+            
+            // Auto-center on resize
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(updateCarousel, 250);
+            });
+        }
+        
+        // Section Header Animation
+        function animateCollectionsHeader() {
+            const section = document.querySelector('#collections');
+            const header = section?.querySelector('.section-header');
+            
+            if (header) {
+                setTimeout(() => header.classList.add('animate'), 100);
+            }
+        }
+        
+        // Intersection Observer for scroll-triggered animation
+        const collectionsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCollectionsHeader();
+                    initCollectionsCarousel();
+                    collectionsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        
+        // Products Carousel Initialization
+        function initProductsCarousel() {
+            const carouselTrack = document.getElementById('productsCarouselTrack');
+            const cards = document.querySelectorAll('#about .product-card');
+            const prevBtn = document.querySelector('#about .carousel-prev');
+            const nextBtn = document.querySelector('#about .carousel-next');
+            
+            if (!carouselTrack || !cards.length) return;
+            
+            // Start with middle card (index 1 for 3 cards)
+            let currentIndex = Math.floor(cards.length / 2);
+            const totalCards = cards.length;
+            
+            // Function to update carousel
+            function updateCarousel() {
+                cards.forEach((card, index) => {
+                    card.classList.remove('active');
+                    if (index === currentIndex) {
+                        card.classList.add('active');
+                    }
+                });
+                
+                // Calculate transform to center the active card
+                if (cards.length > 0 && carouselTrack.offsetWidth > 0) {
+                    const cardWidth = cards[0].offsetWidth;
+                    const gap = 32; // 2rem gap
+                    const trackWidth = carouselTrack.offsetWidth;
+                    const totalWidth = (cardWidth * totalCards) + (gap * (totalCards - 1));
+                    const offset = (trackWidth / 2) - (cardWidth / 2) - (currentIndex * (cardWidth + gap));
+                    carouselTrack.style.transform = `translateX(${offset}px)`;
+                }
+            }
+            
+            // Navigation functions
+            function goToNext() {
+                currentIndex = (currentIndex + 1) % totalCards;
+                updateCarousel();
+            }
+            
+            function goToPrev() {
+                currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+                updateCarousel();
+            }
+            
+            // Event listeners
+            if (nextBtn) nextBtn.addEventListener('click', goToNext);
+            if (prevBtn) prevBtn.addEventListener('click', goToPrev);
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                const aboutSection = document.querySelector('#about');
+                if (!aboutSection) return;
+                
+                const rect = aboutSection.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                
+                if (isVisible) {
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        goToNext();
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        goToPrev();
+                    }
+                }
+            });
+            
+            // Touch/swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            carouselTrack.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            carouselTrack.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        goToNext();
+                    } else {
+                        goToPrev();
+                    }
+                }
+            }
+            
+            // Initialize
+            updateCarousel();
+            
+            // Auto-center on resize
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(updateCarousel, 250);
+            });
+        }
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            const collectionsSection = document.querySelector('#collections');
+            if (collectionsSection) {
+                collectionsObserver.observe(collectionsSection);
+            }
+            
+            // Products carousel observer
+            const productsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        initProductsCarousel();
+                        productsObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+            
+            const aboutSection = document.querySelector('#about');
+            if (aboutSection) {
+                productsObserver.observe(aboutSection);
+            }
+        });
+        
+        // Also trigger after main content is visible (fallback)
+        setTimeout(() => {
+            const collectionsSection = document.querySelector('#collections');
+            if (collectionsSection && collectionsSection.getBoundingClientRect().top < window.innerHeight) {
+                animateCollectionsHeader();
+                initCollectionsCarousel();
+            }
+            
+            const aboutSection = document.querySelector('#about');
+            if (aboutSection && aboutSection.getBoundingClientRect().top < window.innerHeight) {
+                initProductsCarousel();
+            }
+        }, 4000);
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
