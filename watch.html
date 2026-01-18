@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Timeshift - Premium Watches</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -116,11 +116,17 @@
                 <div class="navbar-brand">
                     <a href="#home">Timeshift</a>
                 </div>
-                <ul class="navbar-menu">
-                    <li><a href="#collections">Collections</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#testimonials">Reviews</a></li>
-                    <li><a href="#support">Support</a></li>
+                <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="navbar-overlay" id="navbarOverlay"></div>
+                <ul class="navbar-menu" id="navbarMenu">
+                    <li><a href="#collections" class="menu-link">Collections</a></li>
+                    <li><a href="#about" class="menu-link">About</a></li>
+                    <li><a href="#testimonials" class="menu-link">Reviews</a></li>
+                    <li><a href="#support" class="menu-link">Support</a></li>
                 </ul>
                 <div class="navbar-cart">
                     <button class="cart-btn" id="cartBtn" aria-label="Shopping cart">
